@@ -1,0 +1,101 @@
+version: 2
+
+models: 
+  - name: STG_STYLEHAUS_PRODUCTS
+    description: "Staging model that normalizes STYLEHAUS catalog data from source retailers 
+                  by cleaning and aligning product attributes into a staging view in Snowflake
+                  for downstream transformation and product matching."
+    columns:
+      - name: catalog_record_key
+        data_type: VARCHAR(32)
+        description: "Unique identifier generated for each source catalog record."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: source_system_name
+        data_type: VARCHAR(50)
+        description: "Name of the retailer or source system providing the product record."
+        data_tests:
+          - not_null
+
+      - name: source_product_id
+        data_type: VARCHAR(100)
+        description: "Original product identifier assigned by the source retailer."
+        data_tests:
+          - not_null
+
+      - name: product_name
+        data_type: VARCHAR(500)
+        description: "Product name supplied by the retailer, cleaned of leading & trailing whitespace."
+        data_tests:
+          - not_null
+
+      - name: normalized_product_name
+        data_type: VARCHAR(500)
+        description: "Cleaned product name used to support product comparison & matching across different retailers."
+        data_tests:
+          - not_null
+
+      - name: brand_name
+        data_type: VARCHAR(200)
+        description: "Standardized brand name used for consistent catalog analysis."
+        data_tests:
+          - not_null
+
+      - name: product_category
+        data_type: VARCHAR(200)
+        description: "Normalized product category used for consistent classification."
+        data_tests:
+          - not_null
+
+      - name: product_description
+        data_type: TEXT
+        description: >
+          Product details and specifications provided by the source retailer.
+        data_tests:
+          - not_null
+
+      - name: product_price
+        data_type: NUMBER(10,2)
+        description: >
+          Product selling price represented as a numeric value
+          with two decimal places.
+        data_tests:
+          - not_null
+
+      - name: color_name
+        data_type: VARCHAR(100)
+        description: >
+          Standardized product color used for catalog comparison.
+
+      - name: size_value
+        data_type: VARCHAR(50)
+        description: >
+          Normalized product size or size designation.
+
+      - name: material_description
+        data_type: VARCHAR(200)
+        description: >
+          Product material or fabric description provided by the retailer.
+        data_tests:
+          - not_null
+
+      - name: is_in_stock
+        data_type: BOOLEAN
+        description: >
+          Boolean indicator showing whether the product is available in stock.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
+
+      - name: source_last_modified_at
+        data_type: TIMESTAMP_NTZ
+        description: >
+          Timestamp indicating when the product record was last updated
+          in the source system.
+        data_tests:
+          - not_null
+          

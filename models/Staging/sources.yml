@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: SF_Source
+    database: CATALOG_DB
+    schema: RAW
+    description: "RAW Bronze product catalog tables loaded from Snowflake"
+    tables:
+      - name: STYLEHAUS_PRODUCTS
+        description: "RAW STYLEHAUS catalog (94 rows)"
+      - name: URBANTHREAD_PRODUCTS
+        description: "RAW URBANTHREAD catalog (70 rows)"
+
