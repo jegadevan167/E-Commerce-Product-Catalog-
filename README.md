@@ -48,10 +48,11 @@ http://127.0.0.1:8000/docs
 SEARCH ENDPOINT: 
 GET http://127.0.0.1:8000/products/search?q=Nike+Air+Max&limit=5
 ?
+
 GET PRODUCT + LINEAGE ENDPOINT: 
 GET http://127.0.0.1:8000/products/{product_id}
 
-EXTRA
+*** EXTRA ***
 
 # STEP-6: STREAMLIT PYHTON APPLICATION (SNOWFLAKE)
 
