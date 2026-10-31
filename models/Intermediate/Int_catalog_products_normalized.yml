@@ -1,0 +1,130 @@
+
+version: 2
+
+models:
+  - name: Int_catalog_products_normalized
+    description: "Intermediate incremental model that consolidates standardized product records 
+                  from multiple retailer sources into a unified product catalog. 
+                  Enriches each record with composite searchable text and a dbt processing timestamp 
+                  to support downstream product matching, catalog analysis, & data freshness monitoring."
+
+    columns:
+      - name: catalog_record_key
+        data_type: VARCHAR(32)
+        description: >
+          Unique identifier for a source catalog record, used as the
+          incremental merge key to identify existing records during updates.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: source_system_name
+        data_type: VARCHAR(50)
+        description: >
+          Name of the retailer or source system from which the product
+          record originated.
+        data_tests:
+          - not_null
+
+      - name: source_product_id
+        data_type: VARCHAR(100)
+        description: >
+          Original product identifier assigned by the source retailer.
+        data_tests:
+          - not_null
+
+      - name: product_name
+        data_type: VARCHAR(500)
+        description: >
+          Product name standardized from the source retailer's catalog.
+        data_tests:
+          - not_null
+
+      - name: normalized_product_name
+        data_type: VARCHAR(500)
+        description: >
+          Normalized product name used to support product comparison
+          and matching across different retailers.
+        data_tests:
+          - not_null
+
+      - name: brand_name
+        data_type: VARCHAR(200)
+        description: >
+          Standardized brand name used for consistent catalog classification
+          and cross-source product analysis.
+        data_tests:
+          - not_null
+
+      - name: product_category
+        data_type: VARCHAR(200)
+        description: >
+          Normalized product category used to classify products consistently
+          across retailer catalogs.
+        data_tests:
+          - not_null
+
+      - name: product_description
+        data_type: TEXT
+        description: >
+          Product features, specifications, and descriptive information
+          supplied by the source retailer.
+
+      - name: product_price
+        data_type: NUMBER(10,2)
+        description: >
+          Product selling price represented as a numeric value with
+          two decimal places.
+        data_tests:
+          - not_null
+
+      - name: color_name
+        data_type: VARCHAR(100)
+        description: >
+          Standardized product color used for catalog comparison
+          and product matching.
+
+      - name: size_value
+        data_type: VARCHAR(50)
+        description: >
+          Normalized product size or size designation supplied by
+          the source catalog.
+
+      - name: material_description
+        data_type: VARCHAR(200)
+        description: >
+          Product material or fabric description used to support
+          product comparison and catalog analysis.
+
+      - name: is_in_stock
+        data_type: BOOLEAN
+        description: >
+          Boolean indicator representing whether the product is currently
+          marked as available in the source catalog.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
+
+      - name: source_last_modified_at
+        data_type: TIMESTAMP_NTZ
+        description: >
+          Source-system timestamp indicating when the product record
+          was last modified. Used to identify records eligible for
+          incremental processing.
+
+      - name: composite_text
+        data_type: VARCHAR
+        description: >
+          Concatenated text representation of the product's brand, normalized
+          name, category, color, size, material, and description. Intended
+          to support downstream text-based product matching and search.
+
+      - name: dbt_updated_at
+        data_type: TIMESTAMP_LTZ
+        description: >
+          Timestamp generated during model execution to record when
+          the catalog record was processed by dbt.
+        data_tests:
+          - not_null
